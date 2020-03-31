@@ -10,6 +10,8 @@ public class Player {
     private int playerDistance = 25;
     public static String DOG = "DOG";
     public static String CAT = "CAT";
+    private String flag;
+
 
     private boolean isAutomatic = false;
 
@@ -56,5 +58,13 @@ public class Player {
 
     public void setAutomatic(boolean automatic) {
         isAutomatic = automatic;
+    }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
     }
 }

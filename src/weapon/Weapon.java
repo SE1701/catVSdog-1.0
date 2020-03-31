@@ -16,6 +16,8 @@ public class Weapon {
     private int position;
     private int distance;
 
+    private int flag;
+
     public static int INPUT_ERROR = -1;
     public static int POWER_UP = 0;
     public static int ORDINARY = 1;
@@ -53,6 +55,14 @@ public class Weapon {
 
     public void setDistance(int distance) {
         this.distance = distance;
+    }
+
+    public int getFlag() {
+        return flag;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
     }
 
 }

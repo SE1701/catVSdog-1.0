@@ -32,8 +32,16 @@ public class Controller {
     }
 
     public boolean hit(Player to, int power, Wind wind){
-        return true;
+        return false;
     }
+
+//    public boolean hit(Player to, int power, int wind){
+//        int distance = power+wind-to.getPlayerDistance();
+//        if(distance<(-weapon.getRange()))  { return false;}
+//        else if(distance>weapon.getRange())    { return false;}
+//        to.getHurt(weapon.getDamage()*(weapon.getRange()-Math.abs(distance))/weapon.getRange());
+//        return true;
+//    }
 
     public boolean gameOver(Player player){
         return false;
@@ -46,7 +54,9 @@ public class Controller {
     }
 
     public Player opponent(){
-        if(this.attacker instanceof Dog){ return this.cat; }
+        if(this.attacker instanceof Dog) {
+            return this.cat;
+        }
         return this.dog;
     }
 
@@ -94,5 +104,13 @@ public class Controller {
 
     public Cat getCat() {
         return cat;
+    }
+
+    public Dog getDog() {
+        return dog;
+    }
+
+    public void setDog(Dog dog) {
+        this.dog = dog;
     }
 }

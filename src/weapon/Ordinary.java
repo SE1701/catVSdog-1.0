@@ -8,5 +8,6 @@ public class Ordinary extends Weapon {
         super();
         this.damage = 80;
         this.range = 5;
+        this.setFlag(ORDINARY);
     }
 }
