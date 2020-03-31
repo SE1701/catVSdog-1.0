@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class NewGame {
     private Controller controller;
     private Game game;
+    public static int flag;
 
     public void start(){
         this.chooseMode();
@@ -25,6 +26,15 @@ public class NewGame {
         System.out.println("胜："+this.controller.getOpponentName());
         System.out.println("负："+this.controller.getAttackerName());
         System.out.println("游戏结束");
+    }
+    public static int verChooseMode(int choose){
+        NewGame player=new NewGame();
+        try{
+            player.chooseMode2(choose);
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+        return flag;
     }
 
     /**
@@ -45,6 +55,23 @@ public class NewGame {
         else {
             System.out.println("现在是双人模式");
             this.game = new TwoPlayer();
+        }
+    }
+    public void chooseMode2(int mode){
+        while (mode!=Game.ONE && mode!=Game.TWO){
+            System.out.println("请输入0或1进行选择");
+            mode = getModeInput();
+            flag=0;
+        }
+        if (mode == Game.ONE){
+            System.out.println("现在是单人模式");
+            this.game = new OnePlayer();
+            flag=1;
+        }
+        else {
+            System.out.println("现在是双人模式");
+            this.game = new TwoPlayer();
+            flag=2;
         }
     }
 

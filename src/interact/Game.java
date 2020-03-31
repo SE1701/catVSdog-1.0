@@ -12,6 +12,9 @@ import java.util.Scanner;
  */
 public class Game {
     protected Controller controller;
+    public static  int  flag=0;
+    public static  int  flag2=0;
+    public static  int  flag3=0;
 
     public static int INPUT_ERROR = -1;
     public static int ONE = 0;
@@ -20,6 +23,33 @@ public class Game {
     public Game(){
         this.controller = new Controller();
         System.out.println("游戏开始");
+    }
+    public static int verGetWeaponMode(Player player,int mode){
+        Game game=new Game();
+        try{
+            game.getWeaponMode2(player,mode);
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+        return flag;
+    }
+    public static int verselectPower(Player player, Wind wind,int power){
+        Game game=new Game();
+        try{
+            game.selectPower2(player,wind,power);
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+        return flag2;
+    }
+    public static  int verGeneratePower(Player player,Wind wind){
+        Game game=new Game();
+        try{
+            game.generatePower(player,wind);
+        }catch(Exception e){
+            System.out.println(e.toString());
+        }
+        return  flag3;
     }
 
     /**
@@ -31,17 +61,36 @@ public class Game {
         while (!(mode== Weapon.POWER_UP || mode==Weapon.ORDINARY)){
             System.out.println("请输入0或1进行选择");
             mode = getWeaponModeInput();
+            flag=0;
         }
         if (mode == Weapon.POWER_UP){
             System.out.println("玩家使用了补血工具");
+            flag=1;
         }
         else if(mode == Weapon.ORDINARY) {
             System.out.println("玩家使用了普通攻击工具");
+            flag=2;
+        }
+        controller.initiateWeapon(player,mode);
+    }
+    protected void getWeaponMode2(Player player,int mode){
+        while (!(mode== Weapon.POWER_UP || mode==Weapon.ORDINARY)){
+            System.out.println("请输入0或1进行选择");
+            mode = getWeaponModeInput();
+            flag=0;
+        }
+        if (mode == Weapon.POWER_UP){
+            System.out.println("玩家使用了补血工具");
+            flag=1;
+        }
+        else if(mode == Weapon.ORDINARY) {
+            System.out.println("玩家使用了普通攻击工具");
+            flag=2;
         }
         controller.initiateWeapon(player,mode);
     }
 
-    private int getWeaponModeInput(){
+    protected int getWeaponModeInput(){
         int mode = 0;
         System.out.println("请选择工具   0：补血工具  1：普通武器");
         Scanner scanner = new Scanner(System.in);
@@ -83,8 +132,26 @@ public class Game {
             System.out.println("未击中");
         }
     }
+    public void selectPower2(Player player, Wind wind,int power){
+        //int power = getPowerInput();
+        while (power == -1 || power < 5 || power >50){
+            System.out.println("请输入5-50以内的整数");
+            power = getPowerInput();
+            flag2=0;
+        }
 
-    private int getPowerInput(){
+        boolean isHit= controller.hit(player,power,wind);
+        if(isHit) {
+            System.out.println("击中");
+            flag2=1;
+        }
+        else {
+            System.out.println("未击中");
+            flag2=2;
+        }
+    }
+
+    public int getPowerInput(){
         int power = -1;
         System.out.println("请选择发出的力度，数值范围为[5,50]");
         Scanner scanner = new Scanner(System.in);
@@ -94,6 +161,7 @@ public class Game {
             power = -1;
         }
         return power;
+
     }
 
     /**
@@ -107,9 +175,11 @@ public class Game {
         boolean isHit= controller.hit(player,power,wind);
         if(isHit) {
             System.out.println("击中");
+            flag3=0;
         }
         else {
             System.out.println("未击中");
+            flag3=1;
         }
     }
 
