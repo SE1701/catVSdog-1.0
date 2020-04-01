@@ -1,28 +1,69 @@
 package character;
 
+import weapon.Ordinary;
+import weapon.PowerUp;
+import weapon.Weapon;
+
 /**
  * @author qanna
  */
 public class Player {
-    private int bloodVolume;
+    /**
+     * allVolume：满血血量
+     * bloodVolume：当前的血量
+     *playerPosition：当前的位置
+     * weaponMode：当前所持有的工具类型
+     * name：玩家的称呼
+     */
     private int allVolume = 100;
-    private int pos;
-    private int playerDistance = 25;
+    private int bloodVolume;
+    private int playerPosition = 25;
+    private int weaponMode;
+    private String name;
+
     public static String DOG = "DOG";
     public static String CAT = "CAT";
     private String flag;
 
 
-    private boolean isAutomatic = false;
 
-    public Player(){
+    public Player( String name){
         this.bloodVolume = allVolume;
+        this.name = name;
     }
 
-    public void getHurt(int damage){
-        this.bloodVolume -= damage;
+    /*此函数执行的先决条件是weaponMode有效，所以getWeaponChoice()返回的一定是个有效值*/
+    public Weapon getWeaponByPlayer(){
+        /*！！！to testers:setWeaponMode()，然后判断weapon是否返回正确，用instanceof*/
+        this.setWeaponMode(getWeaponChoice());
+        Weapon wp = getWeaponByMode();
+        return wp;
+
     }
 
+    public int getWeaponChoice(){
+        return 0;
+    }
+
+    public int getPowerByPlayer(){
+        return 0;
+    }
+
+    public Weapon getWeaponByMode(){
+        /*！！！to testers:这里可以测试Weapon是否是按mode给定的，用instanceof*/
+        Weapon wp;
+        switch (this.getWeaponMode()){
+            case Weapon.ORDINARY:
+                wp = new Ordinary();
+                break;
+            case Weapon.POWER_UP:
+                wp = new PowerUp();
+                break;
+            default:
+                wp = null;
+        }
+        return wp;
+    }
 
     public int getBloodVolume() {
         return bloodVolume;
@@ -32,32 +73,20 @@ public class Player {
         this.bloodVolume = bloodVolume;
     }
 
-    public int getPos() {
-        return pos;
-    }
-
-    public void setPos(int pos) {
-        this.pos = pos;
-    }
-
     public int getAllVolume() {
         return allVolume;
     }
 
-    public void setAllVolume(int allVolume) {
-        this.allVolume = allVolume;
+    public int getPlayerPosition() {
+        return playerPosition;
     }
 
-    public int getPlayerDistance() {
-        return playerDistance;
+    public int getWeaponMode() {
+        return weaponMode;
     }
 
-    public boolean isAutomatic() {
-        return isAutomatic;
-    }
-
-    public void setAutomatic(boolean automatic) {
-        isAutomatic = automatic;
+    public void setWeaponMode(int weaponMode) {
+        this.weaponMode = weaponMode;
     }
 
     public String getFlag() {
@@ -67,4 +96,9 @@ public class Player {
     public void setFlag(String flag) {
         this.flag = flag;
     }
+
+    public String getName() {
+        return name;
+    }
+
 }

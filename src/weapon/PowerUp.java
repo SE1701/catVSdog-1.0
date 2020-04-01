@@ -5,7 +5,7 @@ package weapon;
  */
 public class PowerUp extends Weapon {
     public PowerUp() {
-        super();
+        super(-50, 0,"补血工具");
         this.setFlag(POWER_UP);
     }
 }

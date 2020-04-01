@@ -5,6 +5,8 @@ import character.Player;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import weapon.Ordinary;
+import weapon.Weapon;
 import weapon.Wind;
 
 
@@ -29,9 +31,8 @@ public class ControllerTest {
         Player player1 = new Player();
         int mode = 1;
         controller.initiateWeapon(player1,mode);
-        int expected = 1;
-        int actual = controller.getWeapon().getFlag();
-        assertEquals(expected, actual,0.01);
+        Weapon we = controller.getWeapon();
+        assertTrue(we instanceof Ordinary);
 
     }
 

@@ -1,21 +1,29 @@
 package character;
 
+import controller.Controller;
+
 /**
  * @author qanna
  */
 public class  Cat extends Player {
-    private boolean isAutomatic;
-    public Cat(){
+
+    public Cat(String name){
+        super(name);
         this.setFlag("CAT");
     }
 
+
+    /*随机获得攻击工具的选择*/
     @Override
-    public boolean isAutomatic() {
-        return isAutomatic;
+    public int getWeaponChoice(){
+        /*！！！to testers:返回值为[0，2)之间的整数*/
+        return Controller.randomDistance(0,2);
     }
 
+    /*随机获得攻击力度的选择*/
     @Override
-    public void setAutomatic(boolean automatic) {
-        isAutomatic = automatic;
+    public int getPowerByPlayer(){
+        /*！！！to testers:返回值为[0，50)之间的整数*/
+        return Controller.randomDistance(0,50);
     }
 }

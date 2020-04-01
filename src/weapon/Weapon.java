@@ -7,22 +7,27 @@ public class Weapon {
     /**
      * damage:伤害大小
      * range:伤害范围
-     * alpha:伤害值与距离的比值
-     * position:物体现在所在的位置
-     * distance:物体落下的位置
+     * position:工具落下的位置
+     * toolName：工具名称
      */
     protected int damage;
     protected int range;
     private int position;
-    private int distance;
+    private String toolName;
 
     private int flag;
 
-    public static int INPUT_ERROR = -1;
-    public static int POWER_UP = 0;
-    public static int ORDINARY = 1;
+    public static final int INPUT_ERROR = -1;
+    public static final int ORDINARY = 0;
+    public static final int POWER_UP = 1;
 
     public Weapon(){
+    }
+
+    public Weapon(int damage, int range, String name){
+        this.damage = damage;
+        this.range = range;
+        this.toolName = name;
     }
 
     public int getDamage() {
@@ -49,12 +54,8 @@ public class Weapon {
         this.position = position;
     }
 
-    public int getDistance() {
-        return distance;
-    }
-
-    public void setDistance(int distance) {
-        this.distance = distance;
+    public String getToolName() {
+        return toolName;
     }
 
     public int getFlag() {
