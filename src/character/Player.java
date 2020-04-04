@@ -19,22 +19,27 @@ public class Player {
     private int bloodVolume;
     private int playerPosition = 25;
     private int weaponMode;
+
     private String name;
 
     public static String DOG = "DOG";
     public static String CAT = "CAT";
-    private String flag;
 
 
+
+    public Player(){
+        this.bloodVolume = this.getAllVolume();
+    }
 
     public Player( String name){
-        this.bloodVolume = allVolume;
+        this.bloodVolume = this.getAllVolume();
         this.name = name;
     }
 
-    /*此函数执行的先决条件是weaponMode有效，所以getWeaponChoice()返回的一定是个有效值*/
+    /**
+     * 此函数执行的先决条件是weaponMode有效，所以getWeaponChoice()返回的一定是个有效值
+     */
     public Weapon getWeaponByPlayer(){
-        /*！！！to testers:setWeaponMode()，然后判断weapon是否返回正确，用instanceof*/
         this.setWeaponMode(getWeaponChoice());
         Weapon wp = getWeaponByMode();
         return wp;
@@ -50,7 +55,6 @@ public class Player {
     }
 
     public Weapon getWeaponByMode(){
-        /*！！！to testers:这里可以测试Weapon是否是按mode给定的，用instanceof*/
         Weapon wp;
         switch (this.getWeaponMode()){
             case Weapon.ORDINARY:
@@ -89,16 +93,12 @@ public class Player {
         this.weaponMode = weaponMode;
     }
 
-    public String getFlag() {
-        return flag;
-    }
-
-    public void setFlag(String flag) {
-        this.flag = flag;
-    }
 
     public String getName() {
         return name;
+    }
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

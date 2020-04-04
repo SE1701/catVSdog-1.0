@@ -1,14 +1,21 @@
 package controller;
 
+import character.Cat;
+import character.Dog;
 import character.Player;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import weapon.Ordinary;
+import weapon.PowerUp;
 import weapon.Weapon;
 import weapon.Wind;
 
+import javax.swing.text.PlainDocument;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.lang.management.PlatformLoggingMXBean;
 
 import static org.junit.Assert.*;
 
@@ -25,247 +32,359 @@ public class ControllerTest {
         controller = null;
     }
 
-    @Test
-    public void initiateWeapon_ByOrdinary() {
-//        fail();
-        Player player1 = new Player();
-        int mode = 1;
-        controller.initiateWeapon(player1,mode);
-        Weapon we = controller.getWeapon();
-        assertTrue(we instanceof Ordinary);
 
-    }
 
     @Test
-    public void initiateWeapon_ByPowerUp() {
+    public void generateWind() {
 //        fail();
-        Player player2 = new Player();
-        int mode = 0;
-        controller.initiateWeapon(player2,mode);
-        int expected = 0;
-        int actual = controller.getWeapon().getFlag();
-        assertEquals(expected, actual,0.01);
-
+        Wind wind = controller.generateWind();
+        assertTrue(wind.getWindSpeed()>=-20&&wind.getWindSpeed()<=20);
     }
 
 
-    //等价类测试
+    //以下采用等价类测试
+    //攻击者使用补血工具
     @Test
-    public void hit_withInDistAndFollowingWind() {
+    public void throwWeapon_WithPowerUp() {
 //        fail();
+        Weapon wp = new PowerUp();
+        Wind wd = new Wind();
+        Player attacker = new Player();
+        Player victim = new Player();
+
+        String expected = "攻击者血量回升";
+        assertEquals(expected,controller.throwWeapon(wp,wd,attacker,victim));
+
+    }
+
+    //攻击者使用攻击工具并击中对方
+    @Test
+    public void throwWeapon_DogAttackCatAndHit() {
+//        fail();
+        Weapon wp = new Ordinary();
+        Wind wd = new Wind();
+        Player attacker = new Dog("DOG");
+        Player victim = new Cat("CAT");
+
+        wd.setWindSpeed(10);
+        String power = "15";
+        String actual;
+        String expected = "发射武器的力度为15，武器击中对方";
+
+        InputStream stdin = System.in;
+        try {
+            System.setIn(new ByteArrayInputStream(power.getBytes()));
+            actual = controller.throwWeapon(wp,wd,attacker,victim);
+        } finally {
+            System.setIn(stdin);
+        }
+
+        assertEquals(expected,actual);
+    }
+
+    //攻击者使用攻击工具未击中对方
+    @Test
+    public void throwWeapon_DogAttackCatNotHit() {
+//        fail();
+        Weapon wp = new Ordinary();
+        Wind wd = new Wind();
+        Player attacker = new Dog("DOG");
+        Player victim = new Cat("CAT");
+
+        wd.setWindSpeed(5);
+        String power = "5";
+        String actual;
+        String expected = "发射武器的力度为5，武器未击中对方";
+
+        InputStream stdin = System.in;
+        try {
+            System.setIn(new ByteArrayInputStream(power.getBytes()));
+            actual = controller.throwWeapon(wp,wd,attacker,victim);
+        } finally {
+            System.setIn(stdin);
+        }
+
+        assertEquals(expected,actual);
+    }
+
+
+    //以下采用等价类测试
+    //满血时补血
+    @Test
+    public void addBlood_AllBlood() {
+//        fail();
+        Weapon wp = new PowerUp();
         Player player = new Player();
-        Wind wind = new Wind();
-        wind.setWindSpeed(15);
-        assertEquals(true,controller.hit(player,10,wind));
-
+        player.setBloodVolume(100);
+        controller.addBlood(wp,player);
+        assertEquals(100,player.getBloodVolume());
     }
 
+    //失血时补血
     @Test
-    public void hit_withInDistAndAgainstTheWind() {
+    public void addBlood_LessBlood() {
 //        fail();
+        Weapon wp = new PowerUp();
         Player player = new Player();
-        Wind wind = new Wind();
-        wind.setWindSpeed(-14);
-        assertEquals(true,controller.hit(player,30,wind));
-
+        player.setBloodVolume(20);
+        controller.addBlood(wp,player);
+        assertTrue(player.getBloodVolume()>20);
     }
 
+
+    //以下是等价类测试
+    //顺风被击中受伤减血
     @Test
-    public void hit_withoutDist() {
+    public void getHurt_withInDistAndFollowingWind() {
 //        fail();
-        Player player = new Player();
-        Wind wind = new Wind();
-        wind.setWindSpeed(30);
-        assertEquals(true,controller.hit(player,40,wind));
+        Weapon wp = new Ordinary();
+        Wind wd = new Wind();
+        Player victim = new Player();
+        wp.setPosition(20);
+        wd.setWindSpeed(7);
+        victim.setBloodVolume(80);
 
+        int expected = 60;
+        boolean isHit = controller.getHurt(wp,wd,victim);
+        int actual = victim.getBloodVolume();
+        assertTrue(isHit==true);
+        assertEquals(expected,actual);
     }
 
-
-    //边界值测试
+    //逆风被击中受伤减血
     @Test
-    public void hit_littlePower() {
+    public void getHurt_withInDistAndAgainstTheWind() {
 //        fail();
-        Player player = new Player();
-        Wind wind = new Wind();
-        wind.setWindSpeed(10);
-        assertEquals(false,controller.hit(player,5,wind));
+        Weapon wp = new Ordinary();
+        Wind wd = new Wind();
+        Player victim = new Player();
+        wp.setPosition(-10);
+        wd.setWindSpeed(35);
+        victim.setBloodVolume(80);
 
+        int expected = 60;
+        boolean isHit = controller.getHurt(wp,wd,victim);
+        int actual = victim.getBloodVolume();
+        assertTrue(isHit==true);
+        assertEquals(expected,actual);
     }
 
+
+    //未击中减血
     @Test
-    public void hit_littlePower1() {
+    public void getHurt_withoutRange() {
 //        fail();
-        Player player = new Player();
-        Wind wind = new Wind();
-        wind.setWindSpeed(10);
-        assertEquals(false,controller.hit(player,5,wind));
+        Weapon wp = new Ordinary();
+        Wind wd = new Wind();
+        Player victim = new Player();
+        wp.setPosition(-10);
+        wd.setWindSpeed(45);
+        victim.setBloodVolume(80);
 
+        int expected = 80;
+        boolean isHit = controller.getHurt(wp,wd,victim);
+        int actual = victim.getBloodVolume();
+        assertTrue(isHit==false);
+        assertEquals(expected,actual);
     }
 
+
+    //以下采用边界值测试
     @Test
-    public void hit_littlePower2() {
+    public void getHurt_minBorder1() {
 //        fail();
-        Player player = new Player();
-        Wind wind = new Wind();
-        wind.setWindSpeed(10);
-        assertEquals(false,controller.hit(player,6,wind));
+        Weapon wp = new Ordinary();
+        Wind wd = new Wind();
+        Player victim = new Player();
+        wp.setPosition(-10);
+        wd.setWindSpeed(29);
+        victim.setBloodVolume(80);
 
+        int expected = 80;
+        boolean isHit = controller.getHurt(wp,wd,victim);
+        int actual = victim.getBloodVolume();
+        assertTrue(isHit==false);
+        assertEquals(expected,actual);
     }
 
     @Test
-    public void hit_maxPower1() {
+    public void getHurt_minBorder2() {
 //        fail();
-        Player player = new Player();
-        Wind wind = new Wind();
-        wind.setWindSpeed(10);
-        assertEquals(false,controller.hit(player,49,wind));
+        Weapon wp = new Ordinary();
+        Wind wd = new Wind();
+        Player victim = new Player();
+        wp.setPosition(-10);
+        wd.setWindSpeed(30);
+        victim.setBloodVolume(80);
 
+        int expected = 60;
+        boolean isHit = controller.getHurt(wp,wd,victim);
+        int actual = victim.getBloodVolume();
+        assertTrue(isHit==true);
+        assertEquals(expected,actual);
     }
 
     @Test
-    public void hit_maxPower2() {
+    public void getHurt_minBorder3() {
 //        fail();
-        Player player = new Player();
-        Wind wind = new Wind();
-        wind.setWindSpeed(10);
-        assertEquals(false,controller.hit(player,50,wind));
+        Weapon wp = new Ordinary();
+        Wind wd = new Wind();
+        Player victim = new Player();
+        wp.setPosition(-10);
+        wd.setWindSpeed(31);
+        victim.setBloodVolume(80);
 
+        int expected = 60;
+        boolean isHit = controller.getHurt(wp,wd,victim);
+        int actual = victim.getBloodVolume();
+        assertTrue(isHit==true);
+        assertEquals(expected,actual);
     }
 
 
-
-    //等价类测试
     @Test
-    public void gameOver_normalBlood() {
+    public void getHurt_maxBorder1() {
 //        fail();
-        Player player = new Player();
-        player.setBloodVolume(40);
-        boolean actual = controller.gameOver(player);
-        assertTrue(actual == false);
+        Weapon wp = new Ordinary();
+        Wind wd = new Wind();
+        Player victim = new Player();
+        wp.setPosition(-10);
+        wd.setWindSpeed(39);
+        victim.setBloodVolume(80);
+
+        int expected = 60;
+        boolean isHit = controller.getHurt(wp,wd,victim);
+        int actual = victim.getBloodVolume();
+        assertTrue(isHit==true);
+        assertEquals(expected,actual);
+    }
+
+
+    @Test
+    public void getHurt_maxBorder2() {
+//        fail();
+        Weapon wp = new Ordinary();
+        Wind wd = new Wind();
+        Player victim = new Player();
+        wp.setPosition(-10);
+        wd.setWindSpeed(40);
+        victim.setBloodVolume(80);
+
+        int expected = 60;
+        boolean isHit = controller.getHurt(wp,wd,victim);
+        int actual = victim.getBloodVolume();
+        assertTrue(isHit==true);
+        assertEquals(expected,actual);
     }
 
     @Test
-    public void gameOver_invalidBlood() {
+    public void getHurt_maxBorder3() {
+//        fail();
+        Weapon wp = new Ordinary();
+        Wind wd = new Wind();
+        Player victim = new Player();
+        wp.setPosition(-10);
+        wd.setWindSpeed(41);
+        victim.setBloodVolume(80);
+
+        int expected = 80;
+        boolean isHit = controller.getHurt(wp,wd,victim);
+        int actual = victim.getBloodVolume();
+        assertTrue(isHit==false);
+        assertEquals(expected,actual);
+    }
+
+
+
+    //以下采用等价类测试
+    //游戏结束
+    @Test
+    public void gameOver_True() {
 //        fail();
         Player player = new Player();
         player.setBloodVolume(-10);
-        boolean actual = controller.gameOver(player);
-        assertTrue(actual == true);
+        assertTrue(controller.gameOver(player)==true);
     }
 
-
-
-    //边界值测试
+    //游戏未结束
     @Test
-    public void gameOver_zeroBlood() {
+    public void gameOver_False() {
 //        fail();
         Player player = new Player();
-        player.setBloodVolume(0);
-        boolean actual = controller.gameOver(player);
-        assertTrue(actual == true);
+        player.setBloodVolume(10);
+        assertTrue(controller.gameOver(player)==false);
     }
 
+
+    //以下采用边界值测试
     @Test
-    public void gameOver_oneBlood() {
+    public void gameOver_BloodIs1() {
 //        fail();
         Player player = new Player();
         player.setBloodVolume(1);
-        boolean actual = controller.gameOver(player);
-        assertTrue(actual == false);
+        assertTrue(controller.gameOver(player)==false);
     }
 
+    @Test
+    public void gameOver_BloodIs0() {
+//        fail();
+        Player player = new Player();
+        player.setBloodVolume(0);
+        assertTrue(controller.gameOver(player)==true);
+    }
+
+    @Test
+    public void gameOver_BloodMinus1() {
+//        fail();
+        Player player = new Player();
+        player.setBloodVolume(-1);
+        assertTrue(controller.gameOver(player)==true);
+    }
 
 
 
     @Test
     public void randomDistance() {
 //        fail();
-
+        int min = 4;
+        int max = 10;
+        int actual = Controller.randomDistance(min,max);
+        assertTrue(actual>=min&&actual<max);
     }
 
+    //单人模式
     @Test
-    public void opponent_testCat() {
+    public void changeAttacker_OnePlayer() {
 //        fail();
-        Player cat = controller.getCat();
-        Player dog = controller.getDog();
-        controller.setAttacker(cat);
-        Player actual = controller.opponent();
-        assertEquals(dog,actual);
-
-    }
-
-    @Test
-    public void opponent_testDog() {
-//        fail();
-        Player cat = controller.getCat();
-        Player dog = controller.getDog();
-        controller.setAttacker(dog);
-        Player actual = controller.opponent();
-        assertEquals(cat,actual);
-
-    }
-
-
-    @Test
-    public void getAttackerName_testCat() {
-//        fail();
-        Player cat = controller.getCat();
-        controller.setAttacker(cat);
-        String expected = "CAT";
-        String actual = controller.getAttackerName();
-        assertEquals(expected,actual);
-    }
-
-    @Test
-    public void getAttackerName_testDog() {
-//        fail();
-        Player dog = controller.getDog();
-        controller.setAttacker(dog);
-        String expected = "DOG";
-        String actual = controller.getAttackerName();
-        assertEquals(expected,actual);
-    }
-
-    @Test
-    public void getOpponentName_testCat() {
-//        fail();
-        Player cat = controller.getCat();
-        controller.setAttacker(cat);
-        String expected = "DOG";
-        String actual = controller.getOpponentName();
-        assertEquals(expected,actual);
-    }
-
-    @Test
-    public void getOpponentName_testDog() {
-//        fail();
-        Player dog = controller.getDog();
-        controller.setAttacker(dog);
-        String expected = "CAT";
-        String actual = controller.getOpponentName();
-        assertEquals(expected,actual);
-    }
-
-    @Test
-    public void changeAttacker_DogToCat() {
-//        fail();
-        Player dog = controller.getDog();
-        controller.setAttacker(dog);
+        Player attacker = new Dog("DOG");
+        Player victim = new Cat("CAT");
+        controller.setAttacker(attacker);
+        controller.setVictim(victim);
         controller.changeAttacker();
-        Player expected = controller.getCat();
-        Player actual = controller.getAttacker();
-        assertEquals(expected,actual);
+        Player attackerAfter = controller.getAttacker();
+        Player victimAfter = controller.getVictim();
+
+        assertTrue(attackerAfter instanceof Cat);
+        assertTrue(victimAfter instanceof Dog);
+
     }
 
+    //双人模式
     @Test
-    public void changeAttacker_CatToDog() {
+    public void changeAttacker_TwoPlayer() {
 //        fail();
-        Player cat = controller.getCat();
-        controller.setAttacker(cat);
+        String attacker = "DOG1";
+        String victim = "DOG2";
+        controller.setAttacker(new Dog(attacker));
+        controller.setVictim(new Dog(victim));
         controller.changeAttacker();
-        Player expected = controller.getDog();
-        Player actual = controller.getAttacker();
-        assertEquals(expected,actual);
+        String attackerAfter = controller.getAttacker().getName();
+        String victimAfter = controller.getVictim().getName();
+
+        assertEquals(attacker,victimAfter);
+        assertEquals(victim,attackerAfter);
+
     }
+
 
 }

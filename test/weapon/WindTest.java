@@ -1,25 +1,39 @@
 package weapon;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
-//同时测试set和get
 public class WindTest {
-    Wind testgame=new Wind();
+    private  Wind wind;
+
+    @Before
+    public void setUp() throws Exception {
+        wind=new Wind();
+
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        wind=null;
+    }
+
     @Test
     public void getWindSpeed() {
-        testgame.setWindSpeed(400);
-        int expected=400;
-        int actual=testgame.getWindSpeed();
+        wind.setWindSpeed(10);
+        int expected=10;
+        int actual=wind.getWindSpeed();
         assertEquals(expected,actual);
     }
 
     @Test
     public void getWindRange() {
-        testgame.setWindRange(400);
-        int expected=400;
-        int actual=testgame.getWindRange();
+        wind.setWindRange(10);
+        int expected=10;
+        int actual=wind.getWindRange();
         assertEquals(expected,actual);
     }
+
 }

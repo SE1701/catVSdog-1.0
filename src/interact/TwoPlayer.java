@@ -13,20 +13,6 @@ public class TwoPlayer extends Game {
         this.controller.setVictim(new Dog("小猫"));
     }
 
-    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    // To be considered twice...
-//    public static int verround(){
-////        TwoPlayer player=new TwoPlayer();
-////        try{
-////            player.round();
-////        }catch (Exception e){
-////            System.out.println(e.toString());
-////        }
-////        return flag;
-////    }
 
-    // ！！！！！！！！！！
-    // round 函数被移到Game类里了
-    //！！！！！！！！！！！
 
 }

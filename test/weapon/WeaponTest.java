@@ -1,44 +1,53 @@
 package weapon;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class WeaponTest {
+    private Weapon weapon;
 
-    Weapon testgame=new Weapon();
-    //同时测试get和set
+    @Before
+    public void setUp() throws Exception {
+        weapon=new Weapon();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        weapon=null;
+    }
+
     @Test
     public void getDamage() {
-        testgame.setDamage(400);
-        int expected=400;
-        int actual=testgame.getDamage();
+        weapon.setDamage(100);
+        int expected=100;
+        int actual=weapon.getDamage();
         assertEquals(expected,actual);
     }
 
     @Test
     public void getRange() {
-        testgame.setRange(100);
+        weapon.setRange(100);
         int expected=100;
-        int actual=testgame.getRange();
+        int actual=weapon.getRange();
         assertEquals(expected,actual);
     }
 
     @Test
     public void getPosition() {
-        testgame.setPosition(100);
+        weapon.setPosition(100);
         int expected=100;
-        int actual=testgame.getPosition();
+        int actual=weapon.getPosition();
         assertEquals(expected,actual);
-
     }
 
     @Test
-    public void getDistance() {
-        testgame.setDistance(100);
-        int expected=100;
-        int actual=testgame.getDistance();
+    public void getFlag() {
+        weapon.setFlag(2);
+        int expected=2;
+        int actual=weapon.getFlag();
         assertEquals(expected,actual);
-
     }
 }
