@@ -15,19 +15,5 @@ public class OnePlayer extends Game {
 
     }
 
-    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    // To be considered twice...
-//    public static int verround(){
-//        OnePlayer player=new OnePlayer();
-//        try{
-//            player.round();
-//        }catch (Exception e){
-//            System.out.println(e.toString());
-//        }
-//        return flag;
-//    }
 
-    // ！！！！！！！！！！
-    // round 函数被移到Game类里了
-    //！！！！！！！！！！！
 }
