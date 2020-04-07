@@ -23,17 +23,22 @@ public class Game {
 
     }
 
-    public void round() {
-        /*！！！to testers:这里可以 1、测风速是否符合范围；2、weapon是否为空*/
+    public boolean round() {
+        try{
+            Wind wind = controller.generateWind();
+            System.out.println("当前风速大小及方向:"+wind.getWindSpeed());
 
-        Wind wind = controller.generateWind();
-        System.out.println("当前风速大小及方向:"+wind.getWindSpeed());
+            Weapon wp = controller.getAttacker().getWeaponByPlayer();
+            System.out.println("攻击者选择了"+wp.getToolName());
 
-        Weapon wp = controller.getAttacker().getWeaponByPlayer();
-        System.out.println("攻击者选择了"+wp.getToolName());
+            String result = controller.throwWeapon(wp, wind, controller.getAttacker(), controller.getVictim());
+            System.out.println(result);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
 
-        String result = controller.throwWeapon(wp, wind, controller.getAttacker(), controller.getVictim());
-        System.out.println(result);
     }
 
 

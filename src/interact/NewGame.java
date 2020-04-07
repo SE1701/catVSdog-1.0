@@ -30,11 +30,14 @@ public class NewGame {
             System.out.println(this.controller.getVictim().getName()+"的血量:"+this.controller.getVictim().getBloodVolume()+"\n");
             System.out.println("===================第" + (++count) + "轮攻击开始==================");
             System.out.println("【现在轮到"+this.controller.getAttacker().getName()+"攻击】");
-            this.game.round();
-            this.controller.changeAttacker();
+            if(!this.game.round()){
+                System.out.println("游戏出现故障，请稍后重启");
+                break;
+            }
 
+            this.controller.changeAttacker();
         }
-        System.out.println("游戏结束");
+        System.out.println("【游戏结束】");
         System.out.println("胜："+this.controller.getVictim().getName() + "\t当前血量为" +  this.controller.getVictim().getBloodVolume());
         System.out.println("负："+this.controller.getAttacker().getName() + "\t当前血量为" + this.controller.getAttacker().getBloodVolume() );
 

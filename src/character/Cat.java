@@ -7,6 +7,10 @@ import controller.Controller;
  */
 public class  Cat extends Player {
 
+    public Cat(){
+        super();
+    }
+
     public Cat(String name){
         super(name);
         this.setFlag("CAT");

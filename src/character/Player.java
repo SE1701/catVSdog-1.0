@@ -25,12 +25,16 @@ public class Player {
     public static String CAT = "CAT";
     private String flag;
 
-
+    public Player(){
+        this.bloodVolume = allVolume;
+    }
 
     public Player( String name){
         this.bloodVolume = allVolume;
         this.name = name;
     }
+
+
 
     /*此函数执行的先决条件是weaponMode有效，所以getWeaponChoice()返回的一定是个有效值*/
     public Weapon getWeaponByPlayer(){
