@@ -13,7 +13,6 @@ public class Dog extends Player {
         this.setName(name);
     }
 
-
     /**
      *从控制台输入获得攻击工具的选择
      */
@@ -56,7 +55,7 @@ public class Dog extends Player {
      */
     public int getVerifiedPower(int power) {
         int verifiedPower = power;
-        while (verifiedPower < 0 || verifiedPower >= 50) {
+        while (verifiedPower < 0 || verifiedPower >= this.getHalfBlood()) {
             System.out.println("请正确输入：");
             verifiedPower = getUserInput();
         }

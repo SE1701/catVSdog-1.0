@@ -10,9 +10,7 @@ import java.util.Random;
  */
 public class Controller {
 
-    //当前的攻击方
     private Player attacker;
-    //当前的被攻击方
     private Player victim;
 
 
@@ -71,7 +69,11 @@ public class Controller {
         return player.getBloodVolume() <= 0;
     }
 
-    // 随机生成两个数之间的整数，包含最小值，但不包含最大值
+    /**
+     * @param min
+     * @param max
+     * @return 随机生成两个数之间的整数，包含最小值，但不包含最大值
+     */
     public static int randomDistance(int min, int max){
 
         return new Random().nextInt(max- min)+ min;

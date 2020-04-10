@@ -19,11 +19,7 @@ public class Player {
     private int bloodVolume;
     private int playerPosition = 25;
     private int weaponMode;
-
     private String name;
-
-    public static String DOG = "DOG";
-    public static String CAT = "CAT";
 
 
 
@@ -79,6 +75,10 @@ public class Player {
 
     public int getAllVolume() {
         return allVolume;
+    }
+
+    public int getHalfBlood(){
+        return allVolume/2;
     }
 
     public int getPlayerPosition() {

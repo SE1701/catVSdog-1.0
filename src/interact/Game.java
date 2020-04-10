@@ -10,9 +10,6 @@ import weapon.Wind;
 public class Game {
     protected Controller controller;
     private String name;
-//    public static  int  flag=0;
-//    public static  int  flag2=0;
-//    public static  int  flag3=0;
 
     public static int INPUT_ERROR = -1;
     public static int ONE = 0;

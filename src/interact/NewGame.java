@@ -10,7 +10,9 @@ import java.util.Scanner;
 public class NewGame {
     public Controller controller;
     public Game game;
-    /*游戏模式，单人模式0  双人模式1*/
+    /**
+     *游戏模式，单人模式0  双人模式1
+     */
     private int mode;
     public static int flag;
 

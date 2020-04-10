@@ -7,15 +7,10 @@ import controller.Controller;
  */
 public class  Cat extends Player {
 
-    public Cat(){
-        super();
-    }
-
     public Cat(String name){
-        super();
+        super(name);
         this.setName(name);
     }
-
 
     /**
      *随机获得攻击工具的选择

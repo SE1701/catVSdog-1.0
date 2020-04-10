@@ -24,13 +24,23 @@ public class NewGameTest {
 
 
     @Test
-    public void getGameByMode(){
+    public void getGameByModeOnePlayer(){
+        game.setMode(1);
+        boolean expected=true;
+        Game actual=game.getGamebyMode();
+        Boolean result=actual instanceof TwoPlayer;
+        assertEquals(expected,result);
+    }
+
+    @Test
+    public void getGameByModeTwoPlayer(){
         game.setMode(0);
         boolean expected=true;
         Game actual=game.getGamebyMode();
         Boolean result=actual instanceof OnePlayer;
         assertEquals(expected,result);
     }
+
     @Test
     public void getChooseMode(){
         String input = "0";

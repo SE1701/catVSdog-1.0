@@ -1,5 +1,7 @@
 package weapon;
-
+/**
+ * @author qanna
+ */
 public class Wind {
 
     private int windSpeed;

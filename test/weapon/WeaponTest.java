@@ -21,6 +21,7 @@ public class WeaponTest {
 
     @Test
     public void getDamage() {
+        weapon = new Ordinary();
         weapon.setDamage(100);
         int expected=100;
         int actual=weapon.getDamage();
@@ -29,6 +30,7 @@ public class WeaponTest {
 
     @Test
     public void getRange() {
+        weapon = new PowerUp();
         weapon.setRange(100);
         int expected=100;
         int actual=weapon.getRange();
